@@ -1,0 +1,23 @@
+.main-container {
+    width: 100%;
+    height: calc(100%-50px);
+    padding-top: 5rem;
+}
+.recent-note-container, .recent-bookmark-container {
+    height: 350px;
+    padding-left: 15%;
+}
+.recent-note, .recent-bookmark {
+    display: flex;
+    column-gap: 3rem;
+    height: 90%;
+}
+.title {
+    margin-left: 1rem;
+}
+.recent-card {
+    width: 25%;
+    height: 80%;
+    border-radius: 1rem;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 5px 13px 0px;
+}
