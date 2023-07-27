@@ -62,4 +62,27 @@
     height: 70%;
     border-radius: 1rem;
     box-shadow: rgba(100, 100, 111, 0.3) 0px 5px 13px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+.mypage-card-content {
+    height: 60%;
+    padding: 1rem;
+    margin: 0;
+    overflow: hidden;
+    word-break: break-all;
+    font-size: 5.5rem;
+    display: flex;
+    align-items: center;
+}
+.mypage-card-record {
+    height: 18%;
+    font-size: 1.75rem;
+    padding: 1rem;
+    margin: 0;
+    overflow: hidden;
+    word-break: break-all;
+    font-size: 2rem;
 }
