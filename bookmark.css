@@ -35,4 +35,17 @@
     margin-bottom: 7rem;
     border-radius: 1rem;
     background-color: rgba(232, 232, 232, 0.58);
+    display: flex;
+    flex-direction: column;
+}
+.bookmark-list {
+    padding: 1rem 1rem 1rem 3rem;
+}
+.bookmark-list-title {
+    width: 200px;
+    font-size: 2rem;
+    display: inline-block;
+}
+.bookmark-list-link {
+    font-size: 1.5rem;
 }
