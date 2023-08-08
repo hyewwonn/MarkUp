@@ -1,0 +1,72 @@
+.main-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+/* .btn-container {
+    display: flex;
+    justify-content: center;
+    column-gap: 3rem;
+    padding-top: 3rem;
+}
+.btn {
+    width: 180px;
+    height: 50px;
+    background-color: #0061FF;;
+    color: #fff;
+    font-size: 1.25rem;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    font-family: 'KoPubWorld';
+} */
+.recent-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    row-gap: 1rem;
+}
+.recent-note-container, .recent-bookmark-container {
+    width: 70%;
+    height: 330px;
+}
+.recent-note, .recent-bookmark {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 3rem;
+    height: 70%;
+}
+.title {
+    margin-left: 1rem;
+}
+.recent-card {
+    width: 30%;
+    height: 100%;
+    border-radius: 1rem;
+    box-shadow: rgba(100, 100, 111, 0.3) 0px 5px 13px 0px;
+    background-color: rgba(232, 232, 232, 0.58);
+}
+.recent-card-content {
+    height: 50%;
+    padding: 1rem;
+    margin: 0;
+    overflow: hidden;
+    word-break: break-all;
+    font-size: 1.4rem;
+    color: #666;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+}
+.recent-card-title {
+    height: 18%;
+    font-size: 1.75rem;
+    padding: 1.25rem;
+    margin: 0;
+    overflow: hidden;
+    word-break: break-all;
+    font-size: 1.6rem;
+}
