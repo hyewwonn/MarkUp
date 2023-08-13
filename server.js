@@ -24,7 +24,6 @@ app.post('/save-info', async (req, res) => {
     // Oracle DB 연결
     const connection = await oracledb.getConnection(dbConfig);
 
-    // 저장할 데이터 준비
     const data = [id, password];
 
     // 데이터베이스에 저장
@@ -46,7 +45,7 @@ app.post('/save-info', async (req, res) => {
 });
 
 // 서버 시작
-const port = 3000; // 원하는 포트 번호
+const port = 3000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
