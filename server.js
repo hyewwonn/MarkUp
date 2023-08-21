@@ -1,22 +1,20 @@
-// 필요한 모듈 import
 const express = require('express');
 const bodyParser = require('body-parser');
 const oracledb = require('oracledb');
+const cors = require('cors'); // cors 미들웨어 import
 
-// Express 앱 생성
 const app = express();
-
-// JSON 파싱을 위한 미들웨어 설정
 app.use(bodyParser.json());
 
-// Oracle DB 연결 설정
+// cors 미들웨어를 사용하여 모든 도메인으로부터의 요청을 허용
+app.use(cors());
+
 const dbConfig = {
-  user: 'YOUR_DB_USERNAME',
-  password: 'YOUR_DB_PASSWORD',
-  connectString: 'YOUR_DB_CONNECT_STRING',
+  user: 'markup',
+  password: '1234',
+  connectString: 'localhost:1521/xe',
 };
 
-// 페이지 내에서 id와 password 정보를 받아와서 Oracle DB에 저장
 app.post('/save-info', async (req, res) => {
   const { id, password } = req.body;
 
