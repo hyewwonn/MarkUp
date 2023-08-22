@@ -37,14 +37,17 @@ function App() {
                 </div>
                 <div className={styles["bookmark-list-container"]}>
                     <div className={styles["bookmark-list"]}>
+                        <p className={styles["bookmark-list-order"]}>1</p>
                         <p className={styles["bookmark-list-title"]}>테스트용</p>
                         <a className={styles["bookmark-list-link"]} href="https://www.figma.com">figma.com</a>
                     </div>
                     <div className={styles["bookmark-list"]}>
+                        <p className={styles["bookmark-list-order"]}>2</p>
                         <p className={styles["bookmark-list-title"]}>테스트용</p>
                         <a className={styles["bookmark-list-link"]} href="https://www.figma.com">figma.com</a>
                     </div>
                     <div className={styles["bookmark-list"]}>
+                        <p className={styles["bookmark-list-order"]}>3</p>
                         <p className={styles["bookmark-list-title"]}>테스트용</p>
                         <a className={styles["bookmark-list-link"]} href="https://www.figma.com">figma.com</a>
                     </div>
