@@ -20,3 +20,6 @@ a {
 button, input {
   font-family: 'KoPubWorld';
 }
+button {
+  cursor: pointer;
+}
