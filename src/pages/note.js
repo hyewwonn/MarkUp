@@ -17,6 +17,12 @@ function App() {
         setLink("");
     }
 
+    const overlayClickHandler = (event) => {
+        if (event.target.classList.contains(styles["modal-overlay"])) {
+            closeModal();
+        }
+    }
+
     const saveBookmark = () => {
         // 여기에 북마크 저장 로직을 추가하고, 필요하면 서버로 데이터 전송 등의 작업을 수행합니다.
         closeModal();
@@ -107,6 +113,28 @@ function App() {
                     </div>
                 </div>
             </div>
+            
+            {/* modal */}
+            {isModalOpen && (
+                <div className={styles["modal-overlay"]} onClick={overlayClickHandler}>
+                    <div className={styles["modal"]}>
+                        <h1>새 북마크 추가</h1>
+                        <input
+                            type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder="타이틀"
+                        />
+                        <input
+                            type="text"
+                            value={link}
+                            onChange={(e) => setLink(e.target.value)}
+                            placeholder="링크"
+                        />
+                        <button onClick={saveBookmark}>저장</button>
+                    </div>
+                </div>
+            )}
         </div>
         </>
     );
