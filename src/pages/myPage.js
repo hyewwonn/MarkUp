@@ -3,6 +3,10 @@ import styles from '../styles/myPage.module.css';
 import navStyles from '../styles/nav.module.css';
 
 function App() {
+    const logoutOnClick = () => {
+        window.location.href = "/login";
+    }
+
     return (
         <>
         <header>
@@ -37,8 +41,13 @@ function App() {
                 </div>
                 <div className={styles["mypage-content-container"]}>
                     <div className={styles["mypage-content-title-container"]}>
-                        <h1 className={`${styles["mypage-content-title"]} ${styles["mypage-content-name"]}`}>이름</h1>
-                        <h2 className={styles["mypage-content-title"]}>님의 기록</h2>
+                        <div className={styles["mypage-user-info-container"]}>
+                            <h1 className={`${styles["mypage-content-title"]} ${styles["mypage-content-name"]}`}>이름</h1>
+                            <h2 className={styles["mypage-content-title"]}>님의 기록</h2>
+                        </div>
+                        <div className={styles["mypage-logout-btn-container"]}>
+                            <button className={styles["mypage-logout-btn"]} onClick={logoutOnClick}>로그아웃</button>
+                        </div>
                     </div>
                     <div className={styles["mypage-card-container"]}>
                         <div className={`${styles["mypage-card"]} ${styles["mypage-bookmark"]}`}>

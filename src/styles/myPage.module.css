@@ -40,6 +40,12 @@
 }
 .mypage-content-title-container {
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.mypage-user-info-container {
+    display: inline-block;
     margin-left: 1rem;
 }
 .mypage-content-name {
@@ -49,6 +55,19 @@
 .mypage-content-title {
     display: inline-block;
     font-size: 2rem;
+}
+.mypage-logout-btn-container {
+    display: inline-block;
+    margin-right: 1rem;
+}
+.mypage-logout-btn {
+    width: 150px;
+    height: 50px;
+    background-color: #0061FF;
+    border-radius: 1rem;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
 }
 .mypage-card-container {
     width: 100%;
