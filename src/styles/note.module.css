@@ -12,15 +12,30 @@
     display: flex;
     flex-direction: column;
 }
-.note-title {
-    width: fit-content;
+.note-title-container {
+    width: 80%;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     margin-top: 7rem;
-    margin-left: 1rem;
-    font-size: 1.5rem;
     position: fixed;
     top: 0;
+}
+.note-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    margin-left: 2rem;
+}
+.note-writing-btn {
+    width: 150px;
+    height: 50px;
+    background-color: #0061FF;
+    border-radius: 1rem;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    margin-right: 2rem;
 }
 .note-img {
     width: 50px;

@@ -12,21 +12,37 @@
     display: flex;
     flex-direction: column;
 }
-.bookmark-title {
-    width: fit-content;
+.bookmark-title-container {
+    width: 80%;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     margin-top: 7rem;
-    margin-left: 1rem;
-    font-size: 1.5rem;
     position: fixed;
     top: 0;
+}
+.bookmark-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    margin-left: 2rem;
+}
+.bookmark-writing-btn {
+    width: 150px;
+    height: 50px;
+    background-color: #0061FF;
+    border-radius: 1rem;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    margin-right: 2rem;
 }
 .bookmark-img {
     width: 50px;
     height: 50px;
     margin-right: 1rem;
 }
+
 .bookmark-list-container {
     width: 80%;
     height: 60%;
