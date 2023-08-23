@@ -1,10 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from '../styles/myPage.module.css';
 import navStyles from '../styles/nav.module.css';
 
 function App() {
+    const [username, setUsername] = useState("");
+
+    useEffect(() => {
+        fetch("http://localhost:3000/getUsername")
+            .then(response => response.json())
+            .then(data => {
+                setUsername(data.username);
+            })
+            .catch(error => {
+                console.error("Error fetching username:", error);
+            });
+    }, []);
+
     const logoutOnClick = () => {
-        window.location.href = "/login";
+        // 로그아웃 처리 및 페이지 이동
+        fetch("http://localhost:3000/logout", {
+            method: "POST",
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = "/login";
+            } else {
+                console.error("Error logging out");
+            }
+        })
+        .catch(error => {
+            console.error("Error logging out:", error);
+        });
     }
 
     return (
@@ -42,7 +68,9 @@ function App() {
                 <div className={styles["mypage-content-container"]}>
                     <div className={styles["mypage-content-title-container"]}>
                         <div className={styles["mypage-user-info-container"]}>
-                            <h1 className={`${styles["mypage-content-title"]} ${styles["mypage-content-name"]}`}>이름</h1>
+                            <h1 className={`${styles["mypage-content-title"]} ${styles["mypage-content-name"]}`}>
+                                {username}
+                            </h1>
                             <h2 className={styles["mypage-content-title"]}>님의 기록</h2>
                         </div>
                         <div className={styles["mypage-logout-btn-container"]}>

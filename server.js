@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const oracledb = require('oracledb');
 const cors = require('cors');
+const session = require('express-session'); // express-session 미들웨어 추가
 
 const app = express();
 app.use(bodyParser.json());
@@ -13,6 +14,13 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// 세션 설정
+app.use(session({
+  secret: '1234', // 세션 데이터 암호화를 위한 비밀 키
+  resave: false,
+  saveUninitialized: true
+}));
+
 const dbConfig = {
   user: 'markup',
   password: '1234',
@@ -20,6 +28,7 @@ const dbConfig = {
   autoCommit: true,
 };
 
+//회원가입
 app.post('/save-info', async (req, res) => {
   const { name, password } = req.body; // 수정된 필드 이름
   const joinDate = new Date(); // 현재 날짜와 시간
@@ -49,7 +58,7 @@ app.post('/save-info', async (req, res) => {
   }
 });
 
-
+//로그인
 app.post('/login', async (req, res) => {
   const { name, password } = req.body;  
   console.log('Received login request:', name, password);
@@ -66,6 +75,10 @@ app.post('/login', async (req, res) => {
     await connection.close();
 
     if (result.rows.length > 0) {
+      // 세션에 사용자 정보 저장
+      req.session.user = {
+        name: name
+      };
       res.status(200).json({ success: true, message: "성공" });
     } else {
       res.status(401).json({ success: false, message: "실패" });
@@ -73,6 +86,40 @@ app.post('/login', async (req, res) => {
   } catch (error) {
     console.error('Error logging in:', error);
     res.status(500).json({ success: false, message: "서버 오류" });
+  }
+});
+
+// 로그아웃
+app.post('/logout', (req, res) => {
+  try {
+    // 세션 제거
+    req.session.destroy((error) => {
+      if (error) {
+        console.error('Error logging out:', error);
+        res.status(500).json({ message: '로그아웃 중 오류가 발생했습니다.' });
+      } else {
+        res.status(200).json({ message: '로그아웃 되었습니다.' });
+      }
+    });
+  } catch (error) {
+    console.error('Error logging out:', error);
+    res.status(500).json({ message: '로그아웃 중 오류가 발생했습니다.' });
+  }
+});
+
+//사용자 이름 가져오기
+app.get('/getUsername', async (req, res) => {
+  try {
+    const username = req.session.user ? req.session.user.name : null;
+
+    if (username) {
+      res.json({ username });
+    } else {
+      res.status(404).json({ message: "사용자 이름을 찾을 수 없습니다." });
+    }
+  } catch (error) {
+    console.error('Error getting username:', error);
+    res.status(500).json({ message: "서버 오류" });
   }
 });
 
