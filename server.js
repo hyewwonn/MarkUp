@@ -51,9 +51,8 @@ app.post('/save-info', async (req, res) => {
 
 
 app.post('/login', async (req, res) => {
-  const { name, password } = req.body;
-  const passwordString = password.toString(); // 비밀번호를 문자열로 변환  
-  console.log('Received login request:', name, passwordString);
+  const { name, password } = req.body;  
+  console.log('Received login request:', name, password);
 
   try {
     // Oracle DB 연결 및 로그인 정보 확인
@@ -61,21 +60,22 @@ app.post('/login', async (req, res) => {
 
     const result = await connection.execute(
       `SELECT * FROM users WHERE USER_NAME = :1 AND USER_PASSWORD = :2`,
-      [name, passwordString]
+      [name, password]
     );
 
     await connection.close();
 
     if (result.rows.length > 0) {
-      res.status(200).json({ success: true });
+      res.status(200).json({ success: true, message: "성공" });
     } else {
-      res.status(401).json({ success: false });
+      res.status(401).json({ success: false, message: "실패" });
     }
   } catch (error) {
     console.error('Error logging in:', error);
-    res.status(500).json({ success: false });
+    res.status(500).json({ success: false, message: "서버 오류" });
   }
 });
+
 
 // 서버 시작
 const port = 3000;
