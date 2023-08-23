@@ -17,3 +17,6 @@ a {
   color: #666;
   text-decoration: none;
 }
+button, input {
+  font-family: 'KoPubWorld';
+}
