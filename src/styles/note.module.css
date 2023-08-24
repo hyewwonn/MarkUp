@@ -101,7 +101,7 @@
 }
 .modal {
     width: 70%;
-    height: 450px;
+    height: 500px;
     background-color: #fff;
     border-radius: 2rem;
     display: flex;
@@ -120,6 +120,15 @@
     border-radius: 1rem;
     border: 3px solid #cccccc;
     outline: none;
+}
+.modal>textarea {
+    width: 700px;
+    height: 100px;
+    padding: 12px 20px;
+    border-radius: 1rem;
+    border: 3px solid #cccccc;
+    outline: none;
+    resize: none;
 }
 .modal>button {
     width: 620px;

@@ -5,7 +5,7 @@ import navStyles from '../styles/nav.module.css';
 function App() {
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 창 열림 여부
     const [title, setTitle] = useState(""); // 입력된 타이틀
-    const [link, setLink] = useState(""); // 입력된 링크
+    const [content, setContent] = useState(""); // 입력된 링크
 
     const writingOnClick = () => {
         setIsModalOpen(true);
@@ -14,7 +14,7 @@ function App() {
     const closeModal = () => {
         setIsModalOpen(false);
         setTitle("");
-        setLink("");
+        setContent("");
     }
 
     const overlayClickHandler = (event) => {
@@ -66,28 +66,6 @@ function App() {
                     </div>
                 </div>
 
-                {/* modal */}
-                {isModalOpen && (
-                    <div className={styles["modal-overlay"]}>
-                        <div className={styles["modal"]}>
-                            <button className={styles["modal-close-btn"]} onClick={closeModal}>닫기</button>
-                            <input
-                                type="text"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                                placeholder="타이틀"
-                            />
-                            <input
-                                type="text"
-                                value={link}
-                                onChange={(e) => setLink(e.target.value)}
-                                placeholder="링크"
-                            />
-                            <button onClick={saveBookmark}>저장</button>
-                        </div>
-                    </div>
-                )}
-
                 <div className={styles["note-list-container"]}>
                     <div className={styles["note-list"]}>
                         <div className={styles["note-card"]}>
@@ -118,18 +96,17 @@ function App() {
             {isModalOpen && (
                 <div className={styles["modal-overlay"]} onClick={overlayClickHandler}>
                     <div className={styles["modal"]}>
-                        <h1>새 북마크 추가</h1>
+                        <h1>새 노트 추가</h1>
                         <input
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            placeholder="타이틀"
+                            placeholder="제목"
                         />
-                        <input
-                            type="text"
-                            value={link}
-                            onChange={(e) => setLink(e.target.value)}
-                            placeholder="링크"
+                        <textarea
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                            placeholder="내용"
                         />
                         <button onClick={saveBookmark}>저장</button>
                     </div>
