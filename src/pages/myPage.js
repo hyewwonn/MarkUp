@@ -4,6 +4,8 @@ import navStyles from '../styles/nav.module.css';
 
 function App() {
     const [username, setUsername] = useState("");
+    const [joinDate, setJoinDate] = useState(null); // 가입일 저장
+    const [daysSinceJoin, setDaysSinceJoin] = useState(null); // 오늘로부터 며칠째인지 저장
 
     useEffect(() => {
         fetch("http://localhost:3000/getUsername")
@@ -14,23 +16,28 @@ function App() {
             .catch(error => {
                 console.error("Error fetching username:", error);
             });
+
+        fetch("http://localhost:3000/getJoinDate") // 새로 추가된 엔드포인트로 가입일 가져오기
+            .then(response => response.json())
+            .then(data => {
+                setJoinDate(new Date(data.joinDate));
+            })
+            .catch(error => {
+                console.error("Error fetching join date:", error);
+            });
     }, []);
 
+    useEffect(() => {
+        if (joinDate) {
+            const today = new Date();
+            const differenceInTime = today.getTime() - joinDate.getTime();
+            const days = Math.floor(differenceInTime / (1000 * 3600 * 24));
+            setDaysSinceJoin(days+1);
+        }
+    }, [joinDate]);
+
     const logoutOnClick = () => {
-        // 로그아웃 처리 및 페이지 이동
-        fetch("http://localhost:3000/logout", {
-            method: "POST",
-        })
-        .then(response => {
-            if (response.ok) {
-                window.location.href = "/login";
-            } else {
-                console.error("Error logging out");
-            }
-        })
-        .catch(error => {
-            console.error("Error logging out:", error);
-        });
+        window.location.href = "/login";
     }
 
     return (
@@ -87,7 +94,7 @@ function App() {
                             <h1 className={styles["mypage-card-record"]}>노트 수</h1>
                         </div>
                         <div className={`${styles["mypage-card"]} ${styles["mypage-join-date"]}`}>
-                            <h1 className={styles["mypage-card-content"]}>50</h1>
+                        <h1 className={styles["mypage-card-content"]}>{daysSinceJoin}</h1>
                             <h1 className={styles["mypage-card-record"]}>일째</h1>
                         </div>
                     </div>

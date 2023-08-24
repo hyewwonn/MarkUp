@@ -1,11 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from '../styles/note.module.css';
 import navStyles from '../styles/nav.module.css';
 
 function App() {
-    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 창 열림 여부
-    const [title, setTitle] = useState(""); // 입력된 타이틀
-    const [content, setContent] = useState(""); // 입력된 링크
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const [notes, setNotes] = useState([]);
+    const [username, setUsername] = useState("");
+
+    useEffect(() => {
+        fetch("http://localhost:3000/getUsername")
+            .then(response => response.json())
+            .then(data => {
+                setUsername(data.username);
+            })
+            .catch(error => {
+                console.error("Error fetching username:", error);
+            });
+        
+        fetch("http://localhost:3000/getNotes")
+            .then(response => response.json())
+            .then(data => {
+                setNotes(data.notes);
+            })
+            .catch(error => {
+                console.error("Error fetching notes:", error);
+            });
+    }, []);
 
     const writingOnClick = () => {
         setIsModalOpen(true);
@@ -23,9 +45,33 @@ function App() {
         }
     }
 
-    const saveBookmark = () => {
-        // 여기에 북마크 저장 로직을 추가하고, 필요하면 서버로 데이터 전송 등의 작업을 수행합니다.
-        closeModal();
+    // 노트 저장
+    const saveNote = () => {
+        const newNote = {
+            N_TITLE: title,
+            N_CONTENT: content,
+            N_WRITER: username,
+        };
+
+        fetch("http://localhost:3000/saveNote", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newNote),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                setNotes(prevNotes => [...prevNotes, newNote]);
+                closeModal();
+            } else {
+                console.error("Error saving note:", data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Error saving note:", error);
+        });
     }
 
     return (
@@ -68,26 +114,17 @@ function App() {
 
                 <div className={styles["note-list-container"]}>
                     <div className={styles["note-list"]}>
-                        <div className={styles["note-card"]}>
-                            <p className={styles["note-card-text"]}>본문 ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss</p>
-                            <h1 className={styles["note-card-title"]}>이름</h1>
-                            <p className={styles["note-card-date"]}>2005.05.24</p>
-                        </div>
-                        <div className={styles["note-card"]}>
-                            <p className={styles["note-card-text"]}>본문 sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss</p>
-                            <h1 className={styles["note-card-title"]}>이름</h1>
-                            <p className={styles["note-card-date"]}>2005.05.24</p>
-                        </div>
-                        <div className={styles["note-card"]}>
-                            <p className={styles["note-card-text"]}>본문 ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss</p>
-                            <h1 className={styles["note-card-title"]}>이름</h1>
-                            <p className={styles["note-card-date"]}>2005.05.24</p>
-                        </div>
-                        <div className={styles["note-card"]}>
-                            <p className={styles["note-card-text"]}>본문</p>
-                            <h1 className={styles["note-card-title"]}>이름</h1>
-                            <p className={styles["note-card-date"]}>2005.05.24</p>
-                        </div>
+                        {notes && notes.length > 0 ? (
+                            notes.map((note, index) => (
+                                <div className={styles["note-card"]} key={index}>
+                                    <p className={styles["note-card-text"]}>{note.N_CONTENT}</p>
+                                    <h1 className={styles["note-card-title"]}>{note.N_TITLE}</h1>
+                                    <p className={styles["note-card-date"]}>{note.N_DATE}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p>노트를 추가하세요</p>
+                        )}
                     </div>
                 </div>
             </div>
@@ -108,7 +145,7 @@ function App() {
                             onChange={(e) => setContent(e.target.value)}
                             placeholder="내용"
                         />
-                        <button onClick={saveBookmark}>저장</button>
+                        <button onClick={saveNote}>저장</button>
                     </div>
                 </div>
             )}

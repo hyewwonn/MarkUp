@@ -1,11 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from '../styles/bookmark.module.css';
 import navStyles from '../styles/nav.module.css';
 
 function App() {
-    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 창 열림 여부
-    const [title, setTitle] = useState(""); // 입력된 타이틀
-    const [link, setLink] = useState(""); // 입력된 링크
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [title, setTitle] = useState("");
+    const [link, setLink] = useState("");
+    const [username, setUsername] = useState("");
+    const [bookmarks, setBookmarks] = useState([]); // 북마크 목록을 저장하는 상태
+
+    useEffect(() => {
+        fetch("http://localhost:3000/getUsername")
+            .then(response => response.json())
+            .then(data => {
+                setUsername(data.username);
+            })
+            .catch(error => {
+                console.error("Error fetching username:", error);
+            });
+
+        fetch("http://localhost:3000/getBookmarks")
+            .then(response => response.json())
+            .then(data => {
+              setBookmarks(data.bookmarks); // 서버에서 받아온 북마크 목록을 상태에 저장
+            })
+            .catch(error => {
+              console.error("Error fetching bookmarks:", error);
+            });
+    }, []);
 
     const writingOnClick = () => {
         setIsModalOpen(true);
@@ -24,9 +46,38 @@ function App() {
     }
 
     const saveBookmark = () => {
-        // 여기에 북마크 저장 로직을 추가하고, 필요하면 서버로 데이터 전송 등의 작업을 수행합니다.
-        closeModal();
-    }
+        const newBookmark = {
+            B_TITLE: title,
+            B_LINK: link,
+            B_WRITER: username,
+        };
+    
+        fetch("http://localhost:3000/saveBookmark", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newBookmark),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // 성공적으로 저장된 경우에만 화면 갱신
+                const updatedBookmarks = [...bookmarks, {
+                    B_NUM: data.newBookmarkNum, // 서버에서 받아온 순번
+                    B_TITLE: newBookmark.B_TITLE,
+                    B_LINK: newBookmark.B_LINK
+                }];
+                setBookmarks(updatedBookmarks);
+                closeModal();
+            } else {
+                console.error("Error saving bookmark:", data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Error saving bookmark:", error);
+        });
+    };
 
     return (
         <>
@@ -68,19 +119,13 @@ function App() {
 
                 <div className={styles["bookmark-list-container"]}>
                     <div className={styles["bookmark-list"]}>
-                        <p className={styles["bookmark-list-order"]}>1</p>
-                        <p className={styles["bookmark-list-title"]}>테스트용</p>
-                        <a className={styles["bookmark-list-link"]} href="https://www.figma.com">figma.com</a>
-                    </div>
-                    <div className={styles["bookmark-list"]}>
-                        <p className={styles["bookmark-list-order"]}>2</p>
-                        <p className={styles["bookmark-list-title"]}>테스트용</p>
-                        <a className={styles["bookmark-list-link"]} href="https://www.figma.com">figma.com</a>
-                    </div>
-                    <div className={styles["bookmark-list"]}>
-                        <p className={styles["bookmark-list-order"]}>3</p>
-                        <p className={styles["bookmark-list-title"]}>테스트용</p>
-                        <a className={styles["bookmark-list-link"]} href="https://www.figma.com">figma.com</a>
+                        {bookmarks.map((bookmark) => (
+                            <div key={bookmark.B_NUM} className={styles["bookmark-list-item"]}>
+                                <p className={styles["bookmark-list-order"]}>{bookmark.B_NUM}</p>
+                                <p className={styles["bookmark-list-title"]}>{bookmark.B_TITLE}</p>
+                                <a className={styles["bookmark-list-link"]} href={bookmark.B_LINK}>{bookmark.B_LINK}</a>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -94,7 +139,7 @@ function App() {
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            placeholder="타이틀"
+                            placeholder="제목"
                         />
                         <input
                             type="text"
