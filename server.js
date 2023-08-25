@@ -157,10 +157,14 @@ app.get('/getNotes', async (req, res) => {
       );
       
       const notes = result.rows.map(row => ({
-          N_TITLE: row.N_TITLE,
-          N_CONTENT: row.N_CONTENT,
-          N_DATE: row.N_DATE,
-          N_WRITER: row.N_WRITER,
+          // N_TITLE: row.N_TITLE,
+          // N_CONTENT: row.N_CONTENT,
+          // N_DATE: row.N_DATE,
+          // N_WRITER: row.N_WRITER,
+          N_TITLE: 'Note',
+          N_CONTENT: 'Note Content',
+          N_DATE: '2023-08-25',
+          N_WRITER: 'markup',
       }));
 
       await connection.close();
@@ -211,8 +215,10 @@ app.get('/getBookmarks', async (req, res) => {
     await connection.close();
 
     const bookmarks = result.rows.map(row => ({
-      B_TITLE: row.B_TITLE,
-      B_LINK: row.B_LINK,
+      // B_TITLE: row.B_TITLE,
+      // B_LINK: row.B_LINK,
+      B_TITLE: 'Bookmark',
+      B_LINK: 'http://localhost:3001/bookmark',
     }));
 
     res.status(200).json({ bookmarks });

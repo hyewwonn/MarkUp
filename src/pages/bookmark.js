@@ -7,7 +7,8 @@ function App() {
     const [title, setTitle] = useState("");
     const [link, setLink] = useState("");
     const [username, setUsername] = useState("");
-    const [bookmarks, setBookmarks] = useState([]); // 북마크 목록을 저장하는 상태
+    const [bookmarks, setBookmarks] = useState([]);
+    const bnum = 1;
 
     useEffect(() => {
         fetch("http://localhost:3000/getUsername")
@@ -64,7 +65,6 @@ function App() {
             if (data.success) {
                 // 성공적으로 저장된 경우에만 화면 갱신
                 const updatedBookmarks = [...bookmarks, {
-                    B_NUM: data.newBookmarkNum, // 서버에서 받아온 순번
                     B_TITLE: newBookmark.B_TITLE,
                     B_LINK: newBookmark.B_LINK
                 }];
@@ -121,7 +121,7 @@ function App() {
                     <div className={styles["bookmark-list"]}>
                         {bookmarks.map((bookmark) => (
                             <div key={bookmark.B_NUM} className={styles["bookmark-list-item"]}>
-                                <p className={styles["bookmark-list-order"]}>{bookmark.B_NUM}</p>
+                                <p className={styles["bookmark-list-order"]}>{bnum}</p>
                                 <p className={styles["bookmark-list-title"]}>{bookmark.B_TITLE}</p>
                                 <a className={styles["bookmark-list-link"]} href={bookmark.B_LINK}>{bookmark.B_LINK}</a>
                             </div>

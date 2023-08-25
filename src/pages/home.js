@@ -32,7 +32,7 @@ function App() {
         <div className={styles["main-container"]}>
             <div className={styles["recent-container"]}>
                 <div className={styles["recent-note-container"]}>
-                    <h1 className={styles["title"]}>최근 노트</h1>
+                    <h1 className={styles["title"]}>최근 노트 및 북마크</h1>
                     <div className={styles["recent-note"]}>
                         <div className={styles["recent-card"]}>
                             <h1 className={styles["recent-card-content"]}>figma</h1>
@@ -50,7 +50,6 @@ function App() {
                 </div>
 
                 <div className={styles["recent-bookmark-container"]}>
-                    <h1 className={styles["title"]}>최근 북마크</h1>
                     <div className={styles["recent-bookmark"]}>
                         <div className={styles["recent-card"]}>
                             <h1 className={styles["recent-card-content"]}>figma</h1>
