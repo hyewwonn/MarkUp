@@ -8,6 +8,7 @@ function App() {
     const [content, setContent] = useState("");
     const [notes, setNotes] = useState([]);
     const [username, setUsername] = useState("");
+    const [sortBy, setSortBy] = useState("newest"); // 기본 정렬 순서를 "newest"로 설정
 
     useEffect(() => {
         fetch("http://localhost:3000/getUsername")
@@ -19,7 +20,7 @@ function App() {
                 console.error("Error fetching username:", error);
             });
         
-        fetch("http://localhost:3000/getNotes")
+        fetch(`http://localhost:3000/getNotes?sortBy=${sortBy}`)
             .then(response => response.json())
             .then(data => {
                 setNotes(data.notes);
@@ -27,7 +28,7 @@ function App() {
             .catch(error => {
                 console.error("Error fetching notes:", error);
             });
-    }, []);
+    }, [sortBy]);
 
     const writingOnClick = () => {
         setIsModalOpen(true);
@@ -43,6 +44,11 @@ function App() {
         if (event.target.classList.contains(styles["modal-overlay"])) {
             closeModal();
         }
+    }
+
+    const handleSortChange = (event) => {
+        const selectedSort = event.target.value;
+        setSortBy(selectedSort);
     }
 
     // 노트 저장
@@ -107,8 +113,18 @@ function App() {
                         <img className={styles["note-img"]} src="img/note.png" alt="Note" />
                         <h1 className={styles["title"]}>노트</h1>
                     </div>
-                    <div className={styles["note-writing-btn-container"]}>
-                        <button className={styles["note-writing-btn"]} onClick={writingOnClick}>노트 추가</button>
+                    <div className={styles["note-menu-right"]}>
+                        <div className={styles["note-sort-dropdown"]}>
+                            <label htmlFor="sortBy">정렬 순서: </label>
+                            <select id="sortBy" value={sortBy} onChange={handleSortChange}>
+                                <option value="newest">최신순</option>
+                                <option value="oldest">오래된 순</option>
+                                <option value="name">이름순</option>
+                            </select>
+                        </div>
+                        <div className={styles["note-writing-btn-container"]}>
+                            <button className={styles["note-writing-btn"]} onClick={writingOnClick}>노트 추가</button>
+                        </div>
                     </div>
                 </div>
 

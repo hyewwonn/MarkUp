@@ -8,7 +8,7 @@ function App() {
     const [link, setLink] = useState("");
     const [username, setUsername] = useState("");
     const [bookmarks, setBookmarks] = useState([]);
-    const bnum = 1;
+    const [bnum, setBnum] = useState(0);
 
     useEffect(() => {
         fetch("http://localhost:3000/getUsername")
@@ -23,10 +23,14 @@ function App() {
         fetch("http://localhost:3000/getBookmarks")
             .then(response => response.json())
             .then(data => {
-              setBookmarks(data.bookmarks); // 서버에서 받아온 북마크 목록을 상태에 저장
+                const bookmarkData = data.bookmarks.map((bookmark, index) => ({
+                    ...bookmark,
+                    B_NUM: index + 1,
+                }));
+                setBookmarks(bookmarkData);
             })
             .catch(error => {
-              console.error("Error fetching bookmarks:", error);
+                console.error("Error fetching bookmarks:", error);
             });
     }, []);
 
@@ -63,10 +67,9 @@ function App() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // 성공적으로 저장된 경우에만 화면 갱신
                 const updatedBookmarks = [...bookmarks, {
-                    B_TITLE: newBookmark.B_TITLE,
-                    B_LINK: newBookmark.B_LINK
+                    ...newBookmark,
+                    B_NUM: bookmarks.length + 1,
                 }];
                 setBookmarks(updatedBookmarks);
                 closeModal();
@@ -121,7 +124,7 @@ function App() {
                     <div className={styles["bookmark-list"]}>
                         {bookmarks.map((bookmark) => (
                             <div key={bookmark.B_NUM} className={styles["bookmark-list-item"]}>
-                                <p className={styles["bookmark-list-order"]}>{bnum}</p>
+                                <p className={styles["bookmark-list-order"]}>{bookmark.B_NUM}</p>
                                 <p className={styles["bookmark-list-title"]}>{bookmark.B_TITLE}</p>
                                 <a className={styles["bookmark-list-link"]} href={bookmark.B_LINK}>{bookmark.B_LINK}</a>
                             </div>
@@ -153,7 +156,6 @@ function App() {
             )}
         </div>
         </>
-
     );
 }
 

@@ -27,6 +27,13 @@
     font-size: 1.5rem;
     margin-left: 2rem;
 }
+.note-menu-right {
+    display: flex;
+    align-items: center;
+}
+.note-sort-dropdown {
+    margin-right: 20px;
+}
 .note-writing-btn {
     width: 150px;
     height: 50px;

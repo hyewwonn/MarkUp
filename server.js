@@ -151,21 +151,27 @@ app.post('/saveNote', async (req, res) => {
 app.get('/getNotes', async (req, res) => {
   try {
       const connection = await oracledb.getConnection(dbConfig);
+      let orderBy = "N_DATE DESC"; // 기본 최신순
 
+      if (req.query.sortBy === "oldest") {
+          orderBy = "N_DATE ASC";
+      } else if (req.query.sortBy === "name") {
+          orderBy = "N_TITLE ASC";
+      }
       const result = await connection.execute(
-          `SELECT * FROM note`
+          `SELECT * FROM note WHERE N_WRITER = (SELECT USER_NAME FROM users WHERE JOIN_DATE = (SELECT MAX(JOIN_DATE) FROM users)) ORDER BY ${orderBy}`
       );
       
-      const notes = result.rows.map(row => ({
-          // N_TITLE: row.N_TITLE,
-          // N_CONTENT: row.N_CONTENT,
-          // N_DATE: row.N_DATE,
-          // N_WRITER: row.N_WRITER,
-          N_TITLE: 'Note',
-          N_CONTENT: 'Note Content',
-          N_DATE: '2023-08-25',
-          N_WRITER: 'markup',
-      }));
+      const notes = [];
+      for (const row of result.rows) {
+          const note = {
+              N_TITLE: row[0],
+              N_CONTENT: row[1],
+              N_DATE: row[2],
+              N_WRITER: row[3],
+          };
+          notes.push(note);
+      }
 
       await connection.close();
 
@@ -175,6 +181,7 @@ app.get('/getNotes', async (req, res) => {
       res.status(500).json({ message: 'Error fetching notes from Oracle DB' });
   }
 });
+
 
 app.post('/saveBookmark', async (req, res) => {
   const { B_TITLE, B_LINK, B_WRITER } = req.body;
@@ -209,18 +216,19 @@ app.get('/getBookmarks', async (req, res) => {
     const connection = await oracledb.getConnection(dbConfig);
 
     const result = await connection.execute(
-      'SELECT * FROM bookmark'
+      `SELECT * FROM bookmark WHERE B_WRITER = (SELECT USER_NAME FROM users WHERE JOIN_DATE = (SELECT MAX(JOIN_DATE) FROM users))`
     );
 
     await connection.close();
 
-    const bookmarks = result.rows.map(row => ({
-      // B_TITLE: row.B_TITLE,
-      // B_LINK: row.B_LINK,
-      B_TITLE: 'Bookmark',
-      B_LINK: 'http://localhost:3001/bookmark',
-    }));
-
+    const bookmarks = [];
+    for (const row of result.rows) {
+        const bookmark = {
+            B_TITLE: row[1],
+            B_LINK: row[2],
+        };
+        bookmarks.push(bookmark);
+    }
     res.status(200).json({ bookmarks });
   } catch (error) {
     console.error('Error fetching bookmarks from Oracle DB:', error);
