@@ -6,6 +6,8 @@ function App() {
     const [username, setUsername] = useState("");
     const [joinDate, setJoinDate] = useState(null); // 가입일 저장
     const [daysSinceJoin, setDaysSinceJoin] = useState(null); // 오늘로부터 며칠째인지 저장
+    const [bookmarkCount, setBookmarkCount] = useState(0); // 북마크 수
+    const [noteCount, setNoteCount] = useState(0); // 노트 수
 
     useEffect(() => {
         fetch("http://localhost:3000/getUsername")
@@ -25,6 +27,24 @@ function App() {
             .catch(error => {
                 console.error("Error fetching join date:", error);
             });
+
+        fetch("http://localhost:3000/getBookmarkCount") // 북마크 수 가져오기
+            .then(response => response.json())
+            .then(data => {
+                setBookmarkCount(data.bookmarkCount);
+            })
+            .catch(error => {
+                console.error("Error fetching bookmark count:", error);
+            });
+
+        fetch("http://localhost:3000/getNoteCount") // 노트 수 가져오기
+            .then(response => response.json())
+            .then(data => {
+                setNoteCount(data.noteCount);
+            })
+            .catch(error => {
+                console.error("Error fetching note count:", error);
+            });
     }, []);
 
     useEffect(() => {
@@ -32,7 +52,7 @@ function App() {
             const today = new Date();
             const differenceInTime = today.getTime() - joinDate.getTime();
             const days = Math.floor(differenceInTime / (1000 * 3600 * 24));
-            setDaysSinceJoin(days+1);
+            setDaysSinceJoin(days + 1);
         }
     }, [joinDate]);
 
@@ -86,15 +106,15 @@ function App() {
                     </div>
                     <div className={styles["mypage-card-container"]}>
                         <div className={`${styles["mypage-card"]} ${styles["mypage-bookmark"]}`}>
-                            <h1 className={styles["mypage-card-content"]}>63</h1>
+                            <h1 className={styles["mypage-card-content"]}>{bookmarkCount}</h1>
                             <h1 className={styles["mypage-card-record"]}>북마크 수</h1>
                         </div>
                         <div className={`${styles["mypage-card"]} ${styles["mypage-note"]}`}>
-                            <h1 className={styles["mypage-card-content"]}>40</h1>
+                            <h1 className={styles["mypage-card-content"]}>{noteCount}</h1>
                             <h1 className={styles["mypage-card-record"]}>노트 수</h1>
                         </div>
                         <div className={`${styles["mypage-card"]} ${styles["mypage-join-date"]}`}>
-                        <h1 className={styles["mypage-card-content"]}>{daysSinceJoin}</h1>
+                            <h1 className={styles["mypage-card-content"]}>{daysSinceJoin}</h1>
                             <h1 className={styles["mypage-card-record"]}>일째</h1>
                         </div>
                     </div>

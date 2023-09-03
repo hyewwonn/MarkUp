@@ -236,6 +236,47 @@ app.get('/getBookmarks', async (req, res) => {
   }
 });
 
+// 북마크 수 가져오기
+app.get('/getBookmarkCount', async (req, res) => {
+  try {
+      const connection = await oracledb.getConnection(dbConfig);
+
+      const result = await connection.execute(
+          `SELECT COUNT(*) FROM bookmark WHERE B_WRITER = (SELECT USER_NAME FROM users WHERE JOIN_DATE = (SELECT MAX(JOIN_DATE) FROM users))`
+      );
+
+      const bookmarkCount = result.rows[0][0];
+
+      await connection.close();
+
+      res.status(200).json({ bookmarkCount });
+  } catch (error) {
+      console.error('Error fetching bookmark count from Oracle DB:', error);
+      res.status(500).json({ message: 'Error fetching bookmark count from Oracle DB' });
+  }
+});
+
+// 노트 수 가져오기
+app.get('/getNoteCount', async (req, res) => {
+  try {
+      const connection = await oracledb.getConnection(dbConfig);
+
+      const result = await connection.execute(
+          `SELECT COUNT(*) FROM note WHERE N_WRITER = (SELECT USER_NAME FROM users WHERE JOIN_DATE = (SELECT MAX(JOIN_DATE) FROM users))`
+      );
+
+      const noteCount = result.rows[0][0];
+
+      await connection.close();
+
+      res.status(200).json({ noteCount });
+  } catch (error) {
+      console.error('Error fetching note count from Oracle DB:', error);
+      res.status(500).json({ message: 'Error fetching note count from Oracle DB' });
+  }
+});
+
+
 // 서버 시작
 const port = 3000;
 app.listen(port, () => {
